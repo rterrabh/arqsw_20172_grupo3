@@ -3,15 +3,14 @@ package tp1gcc252;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class TP1GCC252 {
 
+    private static ArrayList<String> mapeamentosUtilizados   = new ArrayList<>();
+    private static ArrayList<String> mapeamentosConfigurados = new ArrayList<>();
+    
     public static void main(String[] args) {
-        HashMap<String, String> dictionaryAppService = new HashMap<String, String>();
-        HashMap<String, String> dictionaryMappers = new HashMap<String, String>();
-
-
+        
         Path arquivosAppService = Paths.get("C:\\Projetos\\DDD_011\\src\\Aptum.SIVI.Application.Impl\\AppServices");
         Path arquivosMapeamentos = Paths.get("C:\\Projetos\\DDD_011\\src\\Aptum.SIVI.Application.Impl\\AutoMapper");
         
@@ -26,30 +25,50 @@ public class TP1GCC252 {
         }
         
         
+        
         for(String path : appService.getArquivos()){
             Arquivo arquivo = new Arquivo(path);
-            
-            /*String encontrado1 = arquivo.BuscarTexto("TO<");
-            if(encontrado1 != null)
-            {
-                TrataStringMapper(encontrado1);
-            }*/
             
             ArrayList<String> encontrado2 = arquivo.BuscarTexto("Mapper.Map<");
             if(encontrado2.size() > 0)
                 TrataStringMapperMap(encontrado2);
         }
         
-        /*for(String path : mappers.getArquivos()){
+        
+        
+        for(String path : mappers.getArquivos()){
             Arquivo arquivo = new Arquivo(path);
 
             ArrayList<String> linhasEncontradas = arquivo.BuscarTexto("CreateMap<");
              if(linhasEncontradas.size() > 0)
                 TrataStringCreateMap(linhasEncontradas);
-
+        }
+        
+        
+        /*for(String mapeamentoConfigurado : mapeamentosConfigurados)
+        {
+            System.out.print(mapeamentoConfigurado + "\n");
+        }
+        
+        System.out.print("------------------------------------------------------------------\n");
+        
+        for(String mapeamentoUtilizado : mapeamentosUtilizados)
+        {
+            System.out.print(mapeamentoUtilizado + "\n");
         }*/
         
+        
+        for(String mapeamentoUtilizado : mapeamentosUtilizados)
+        {
+            if(!mapeamentosConfigurados.contains(mapeamentoUtilizado))
+            {
+                System.out.print(mapeamentoUtilizado + "\n");
+            }
+        }
+        
+        
     }
+
 
     private static void TrataStringMapperMap(ArrayList<String> linhasEncontradas) {
 
@@ -63,7 +82,8 @@ public class TP1GCC252 {
                 String a3[] = a2[0].split(",");
                 if(a3.length > 1)
                 {
-                    System.out.print(a3[0].replaceAll(" ", "") + " >>> " + a3[1].replaceAll(" ", "") + "\n");
+                    if(!mapeamentosUtilizados.contains(a3[0].replaceAll(" ", "") + ">>" + a3[1].replaceAll(" ", "")))
+                        mapeamentosUtilizados.add(a3[0].replaceAll(" ", "") + ">>" + a3[1].replaceAll(" ", ""));
                 }
             }
         }
@@ -77,7 +97,8 @@ public class TP1GCC252 {
             String a2[] = a1[1].split(">");
             String a3[] = a2[0].split(",");
             if(a3.length > 1){
-                System.out.print(a3[0].replaceAll(" ", "") + " >>> " + a3[1].replaceAll(" ", "") + "\n");
+                if(!mapeamentosConfigurados.contains(a3[0].replaceAll(" ", "") + ">>" + a3[1].replaceAll(" ", "")))
+                    mapeamentosConfigurados.add(a3[0].replaceAll(" ", "") + ">>" + a3[1].replaceAll(" ", ""));
             }
         }
     }
