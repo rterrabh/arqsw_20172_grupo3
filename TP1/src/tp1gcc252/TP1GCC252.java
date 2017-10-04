@@ -10,11 +10,11 @@ public class TP1GCC252 {
     private static final ArrayList<String> mapeamentosUtilizados   = new ArrayList<>();
     private static final ArrayList<String> mapeamentosConfigurados = new ArrayList<>();
 
-    private static final Path arquivosAppService  = Paths.get("D:\\Projetos\\Projetos\\DDD_011\\DDD_011\\src\\Aptum.SIVI.Application.Impl\\AppServices");
-    private static final Path arquivosMapeamentos = Paths.get("D:\\Projetos\\Projetos\\DDD_011\\DDD_011\\src\\Aptum.SIVI.Application.Impl\\AutoMapper");
+    private static final Path arquivosAppService  = Paths.get("C:\\Projetos\\DDD_011");
+    private static final Path arquivosMapeamentos = Paths.get("C:\\Projetos\\DDD_011");
     private static final Diretorio mappers = new Diretorio();
     private static final Diretorio configs = new Diretorio();
-
+    private static boolean mostrarLinhasPath = false;
     
     public static void main(String[] args) {
         
@@ -23,17 +23,18 @@ public class TP1GCC252 {
             System.out.println("****************************************************************");
             System.out.println("*                       MENU INICIAL                           *");
             System.out.println("*                                                              *");
-            System.out.println("*                  <1> IMPRIMIR ANALISE                        *");
-            System.out.println("*                  <2> IMPRIMIR ANALISE COMPLETA               *");
-            System.out.println("*                  <3> IMPRIMIR ARQUIVOS ANALISADOS            *");
-            System.out.println("*                  <0> SAIR                                    *");
+            System.out.println("*                  <1>  ANALISE                                *");
+            System.out.println("*                  <2>  ANALISE COMPLETA                       *");
+            System.out.println("*                  <3>  ARQUIVOS ANALISADOS                    *");
+            System.out.println("*                  <4>  MAPEAMENTOS CONFIGURADOS               *");
+            System.out.println("*                  <5>  MAPEAMENTOS UTILIZADOS                 *");
+            System.out.println("*                  <0>  SAIR                                   *");
             System.out.println("*                                                              *");
             System.out.println("****************************************************************\nOpcao: ");
             
             Scanner kb = new Scanner(System.in);
             opcao = kb.nextInt();
             
-
             switch(opcao){
                 case 1:
                     ImprimirAnalise();
@@ -47,17 +48,19 @@ public class TP1GCC252 {
                     ImprimirArquivosAnalisados();
                 break;
 
+                case 4:
+                    ImprimirMapeamentosConfigurados();
+                break;
+                        
+                case 5:
+                    ImprimirMapeamentosUtilizados();
+                break;
+                            
                 case 0:
                     System.out.print("Deseja sair do sistema ?\n<1>Sim        <2>Nao\nOpcao: ");
                     sair = kb.nextInt();
-                    if(sair == 1)
-                    {
-                        
-                    }
-                    else
-                    {
+                    if(sair != 1)
                         opcao = -1;
-                    }
                 break;
             }
         }while(opcao != 0);
@@ -66,6 +69,7 @@ public class TP1GCC252 {
     
     private static void ImprimirAnalise(){
         RealizarAnalise();
+        PergMostrarLinhasPath();
         System.out.println("** Mapeamentos utilizados e não configurados **\n");
         
         for(String mapeamentoUtilizado : mapeamentosUtilizados)
@@ -88,7 +92,11 @@ public class TP1GCC252 {
         {
             if(!mapeamentosConfigurados.contains(mapeamentoUtilizado))
             {
-                System.out.print(mapeamentoUtilizado + "\n");
+                System.out.print(mapeamentoUtilizado);
+                if(mostrarLinhasPath)
+                {
+                    System.out.print(mapeamentoUtilizado);    
+                }
             }
         }
     }
@@ -110,6 +118,7 @@ public class TP1GCC252 {
     }
     
     private static void RealizarAnalise(){
+        System.out.println("Executando Análise ...\n");
         
         try {
             Files.walkFileTree(arquivosAppService, mappers);
@@ -121,7 +130,7 @@ public class TP1GCC252 {
         for(String path : mappers.getArquivos()){
             Arquivo arquivo = new Arquivo(path);
             
-            ArrayList<String> linhasEncontradas = arquivo.BuscarTexto("Mapper.Map<");
+            ArrayList<Linha> linhasEncontradas = arquivo.BuscarTexto("Mapper.Map<");
             if(linhasEncontradas.size() > 0)
                 TrataStringMapperMap(linhasEncontradas);
         }
@@ -129,7 +138,7 @@ public class TP1GCC252 {
         for(String path : mappers.getArquivos()){
             Arquivo arquivo = new Arquivo(path);
             
-            ArrayList<String> linhasEncontradas = arquivo.BuscarTexto("To<");
+            ArrayList<Linha> linhasEncontradas = arquivo.BuscarTexto("To<");
             if(linhasEncontradas.size() > 0)
                 TrataStringMapperTo(linhasEncontradas);
         }
@@ -137,17 +146,17 @@ public class TP1GCC252 {
         for(String path : configs.getArquivos()){
             Arquivo arquivo = new Arquivo(path);
 
-            ArrayList<String> linhasEncontradas = arquivo.BuscarTexto("CreateMap<");
+            ArrayList<Linha> linhasEncontradas = arquivo.BuscarTexto("CreateMap<");
              if(linhasEncontradas.size() > 0)
                 TrataStringCreateMap(linhasEncontradas);
         }
     }
 
-    private static void TrataStringMapperMap(ArrayList<String> linhasEncontradas) {
+    private static void TrataStringMapperMap(ArrayList<Linha> linhasEncontradas) {
 
-        for(String linha : linhasEncontradas)
+        for(Linha linha : linhasEncontradas)
         {
-            String a1[] = linha.split("Mapper.Map<");
+            String a1[] = linha.getTexto().split("Mapper.Map<");
 
             if(!a1[1].contains("IEnumerable"))
             {
@@ -179,11 +188,11 @@ public class TP1GCC252 {
     }
 
 
-    private static void TrataStringMapperTo(ArrayList<String> linhasEncontradas) {
+    private static void TrataStringMapperTo(ArrayList<Linha> linhasEncontradas) {
 
-        for(String linha : linhasEncontradas)
+        for(Linha linha : linhasEncontradas)
         {
-            String a1[] = linha.split("To<");
+            String a1[] = linha.getTexto().split("To<");
 
             if(!a1[1].contains("IEnumerable"))
             {
@@ -206,11 +215,11 @@ public class TP1GCC252 {
     }
 
 
-    private static void TrataStringCreateMap(ArrayList<String> linhasEncontradas) {
+    private static void TrataStringCreateMap(ArrayList<Linha> linhasEncontradas) {
         
-        for(String linha : linhasEncontradas)
+        for(Linha linha : linhasEncontradas)
         {
-            String a1[] = linha.split("CreateMap<");
+            String a1[] = linha.getTexto().split("CreateMap<");
             String a2[] = a1[1].split(">");
             String a3[] = a2[0].split(",");
             if(a3.length > 1){
@@ -218,6 +227,36 @@ public class TP1GCC252 {
                     mapeamentosConfigurados.add(a3[0].replaceAll(" ", "") + ">>" + a3[1].replaceAll(" ", ""));
             }
         }
+    }
+
+    private static void ImprimirMapeamentosConfigurados() {
+        RealizarAnalise();
+        System.out.println("** Mapeamentos Configurados **\n");
+        
+        for(String mapeamentoConfigurado : mapeamentosConfigurados)
+        {
+            System.out.println(mapeamentoConfigurado);    
+        }
+    }
+
+    private static void ImprimirMapeamentosUtilizados() {
+        RealizarAnalise();
+        System.out.println("** Mapeamentos Utilizados **\n");
+        
+        for(String mapeamentoUtilizado : mapeamentosUtilizados)
+        {
+            System.out.println(mapeamentoUtilizado);    
+        }
+    }
+
+    private static void PergMostrarLinhasPath() {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Deseja mostrar o numero da linha e o diretorio do arquivo encontrado ?\n<1>Sim        <2>Nao\nOpcao: ");
+        int op = kb.nextInt();
+        if(op == 1)
+            mostrarLinhasPath = true;
+        else
+            mostrarLinhasPath = false;
     }
     
 }

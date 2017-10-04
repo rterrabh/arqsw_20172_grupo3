@@ -28,16 +28,21 @@ public class Arquivo {
         }
     }
     
-    public ArrayList<String> BuscarTexto(String busca){
+    public ArrayList<Linha> BuscarTexto(String busca){
         
-        ArrayList<String> ret = new ArrayList<>();
+        ArrayList<Linha> ret = new ArrayList<>();
         
         try{
             BufferedReader br = new BufferedReader(new FileReader(path));
+            int numLinha = 1;
             while(br.ready()){
-                String linha = br.readLine();
-                if(linha.contains(busca))
+                String textoLinha = br.readLine();
+                if(textoLinha.contains(busca))
+                {
+                    Linha linha = new Linha(textoLinha, numLinha, path);
                     ret.add(linha);
+                }
+                numLinha++;
             }
             br.close();
         }catch(IOException ioe){
