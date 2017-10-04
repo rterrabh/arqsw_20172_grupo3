@@ -7,24 +7,29 @@ import java.util.ArrayList;
 public class Diretorio extends SimpleFileVisitor<Path>{
  
     private ArrayList<String> arquivos;
+    private boolean imprimirDiretorio;
     
     public Diretorio() {
         arquivos = new ArrayList<>();
+        imprimirDiretorio = false;
     }
     
-    
+    @Override
     public FileVisitResult visitFile(Path path, BasicFileAttributes fileAttributes){
 
         if(GetExtension(path.toString()).equals("cs")){
-            //System.out.println("Nome do arquivo:" + path.getFileName());
+            if(imprimirDiretorio)
+                System.out.println("Nome do arquivo:" + path.getFileName());
             arquivos.add(path+"");
         }
         
         return FileVisitResult.CONTINUE;
     }
     
+    @Override
     public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes fileAttributes){
-        //System.out.println("----------Nome do diretório:" + path + "----------");
+        if(imprimirDiretorio)
+            System.out.println("---------- Nome do diretório:" + path + " ----------");
         return FileVisitResult.CONTINUE;
     }
     
@@ -44,5 +49,13 @@ public class Diretorio extends SimpleFileVisitor<Path>{
 
     public void setArquivos(ArrayList<String> arquivos) {
         this.arquivos = arquivos;
+    }
+
+    public boolean isImprimirDiretorio() {
+        return imprimirDiretorio;
+    }
+
+    public void setImprimirDiretorio(boolean imprimirDiretorio) {
+        this.imprimirDiretorio = imprimirDiretorio;
     }
 }
