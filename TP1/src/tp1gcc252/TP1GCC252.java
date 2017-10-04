@@ -92,11 +92,7 @@ public class TP1GCC252 {
         {
             if(!mapeamentosConfigurados.contains(mapeamentoUtilizado))
             {
-                System.out.print(mapeamentoUtilizado);
-                if(mostrarLinhasPath)
-                {
-                    System.out.print(mapeamentoUtilizado);    
-                }
+                System.out.println(mapeamentoUtilizado);
             }
         }
     }
