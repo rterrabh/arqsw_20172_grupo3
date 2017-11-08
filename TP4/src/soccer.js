@@ -7,34 +7,21 @@ var Championship = function () {
   }
 }
 
-var Coach = (function () {
-    var instance = null;
-    function createInstance() {
-        return {
-            shout: function (message) {
-                console.log(message.toUpperCase() + '!!!');
-            },
-            instruct: function (player) {
-                switch (player.position) {
-                case 'goalkeeper':
-                    this.shout(player.name + ', não saia muito do gol');
-                    break;
-                case 'defender':
-                    this.shout(player.name + ', não para de marcar o atacante');
-                    break;
-                }
-            }
-        };
-    }
-    return {
-        getInstance: function () {
-            if (instance === null) {
-                instance = createInstance();
-                return instance;
-            }
+var Coach = function () {
+  this.shout = function (message) {
+        console.log(message.toUpperCase() + '!!!');
+      }
+  this.instruct = function (player) {
+        switch (player.position) {
+          case 'goalkeeper':
+            this.shout(player.name + ', não saia muito do gol');
+            break;
+          case 'defender':
+            this.shout(player.name + ', não para de marcar o atacante');
+            break;
         }
-    };
-}());
+      }
+};
 
 // Data
 var player1 = {
