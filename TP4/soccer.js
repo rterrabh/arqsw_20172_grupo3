@@ -1,34 +1,54 @@
-var Coach = function () {
-  this.scream = function (message) {
-    console.log(message.toUpperCase() + '!!!');
+var Championship = function () {
+  this.teams = [];
+  this.location = 'Europe';
+
+  this.addTeam = function (team) {
+    this.teams.push(team);
   }
+}
 
-  this.instruct = function (player) {
-
-    switch(player.position) {
-      case 'goalkeeper':
-        this.scream(player.name + ', take care with lobs');
-        break;
-      case 'defender':
-        this.scream(player.name + ', you should mark them, c\'mon');
-        break;
+var Coach = (function () {
+    var instance = null;
+    function createInstance() {
+        return {
+            shout: function (message) {
+                console.log(message.toUpperCase() + '!!!');
+            },
+            instruct: function (player) {
+                switch (player.position) {
+                case 'goalkeeper':
+                    this.shout(player.name + ', não saia muito do gol');
+                    break;
+                case 'defender':
+                    this.shout(player.name + ', não para de marcar o atacante');
+                    break;
+                }
+            }
+        };
     }
-  }
-};
+    return {
+        getInstance: function () {
+            if (instance === null) {
+                instance = createInstance();
+                return instance;
+            }
+        }
+    };
+}());
 
 // Data
 var player1 = {
   position: 'goalkeeper',
-  name: 'Neto'
+  name: 'Alexandre'
 };
 
 var player2 = {
   position: 'defender',
-  name: 'Ale'
+  name: 'Guilherme'
 };
 
-const c = new Coach();
+const coach = Coach.getInstance();
 
-c.instruct(player1);
-c.instruct(player2);
+coach.instruct(player1);
+coach.instruct(player2);
 
