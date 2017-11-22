@@ -1,3 +1,0 @@
-# MVCCalculator
-
-Derek Banas Tutorial 
