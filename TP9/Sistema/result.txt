@@ -1,0 +1,5 @@
+Models -> jquery
+Controllers -> jquery
+Models -> jquery
+View -> Controllers
+Controllers -> Models
