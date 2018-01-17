@@ -8,8 +8,13 @@ const _ = require('lodash');
 //Restricoes
 const restricoes = new Array();
 restricoes.push(new Dependencia("Controllers", "Models", false));
-restricoes.push(new Dependencia("Models", "Views", false));
-restricoes.push(new Dependencia("Views", "Models", false));
+restricoes.push(new Dependencia("Models", "jquery", false));
+//restricoes.push(new Dependencia("Views", "Models", false));
+
+//Obrigatoriedades
+const obrigatoriedades = new Array();
+obrigatoriedades.push(new Obrigatoriedades("jquery", "Models", false));
+
 
 //Dependencias
 const dependencias = [];
@@ -18,10 +23,6 @@ function Dependencia(modulo, dependencia, encontrada) {
   this.Dependencia = dependencia;
   this.Encontrada = encontrada;
 }
-
-//Restricoes
-const obrigatoriedades = new Array();
-obrigatoriedades.push(new Obrigatoriedades("Controllers", "Controller2", false));
 
 function Obrigatoriedades(modulo, dependencia, encontrada) {
   this.Modulo = modulo;
@@ -106,38 +107,31 @@ const escreveArquivo = function() {
 	
 	arquivos.forEach(arquivo => {
 		arquivo.Dependencias.forEach(dependencia => {
+		
 			var cor = '';
-			for(k = 0; k < restricoes.length; k++){	
-				arquivo.Dependencias.forEach(depend => {
-					
-					if((arquivo.Modulo === restricoes[k].Modulo) && (depend === restricoes[k].Dependencia) && (restricoes[k].Encontrada === false)){
-						restricoes[k].Encontrada = true;
-						
-						console.log((arquivo.Modulo === restricoes[k].Modulo) && (depend === restricoes[k].Dependencia) && (restricoes[k].Encontrada === false));
-						
-						cor = ' {color:red, weight:3}';
-					}
-				});
-				
-				fs.appendFile('result.txt', arquivo.Modulo + ' -> ' + dependencia + cor + '\n', err => {
-					if (err) return console.log(err)
-				})
+			for(k = 0; k < restricoes.length; k++){
+				if((arquivo.Modulo === restricoes[k].Modulo) && (dependencia === restricoes[k].Dependencia)){
+					cor = ' {color:red, weight:3}';
+					fs.appendFile('logViolacoes.txt', 'Dependencia nao permitida: Arquivo: ' + arquivo.Diretorio + '.js' + ' Dependencia: ' + dependencia + '\n', err => {
+						if (err) return console.log(err)
+					})
+				}
 			}
 			
+			fs.appendFile('result.txt', arquivo.Modulo + ' -> ' + dependencia + cor + '\n', err => {
+					if (err) return console.log(err)
+			});
 			
 			for(k = 0; k < obrigatoriedades.length; k++){
 				if(arquivo.Modulo === obrigatoriedades[k].Modulo &&
-				   arquivo.Dependencia === obrigatoriedades[k].Dependencia)
+				   dependencia === obrigatoriedades[k].Dependencia)
 				   obrigatoriedades[k].Encontrada = true;
 			}
-			
-			
-			
 		});
 	});
 	
 	obrigatoriedades.forEach(obrigatoriedade => {
-		if(obrigatoriedade.Encontrada == false){
+		if(obrigatoriedade.Encontrada === false){
 			fs.appendFile('result.txt', obrigatoriedade.Modulo + ' -> ' + obrigatoriedade.Dependencia + ' {color:gold, weight:3}' + '\n', err => {
 				if (err) return console.log(err)
 			})
