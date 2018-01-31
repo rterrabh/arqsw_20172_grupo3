@@ -1,3 +1,5 @@
+// Arquivo: analyser.js
+
 const espree = require('espree');
 const estraverse = require('estraverse');
 const escodegen = require('escodegen');

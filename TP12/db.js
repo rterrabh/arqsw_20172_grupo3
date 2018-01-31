@@ -1,3 +1,5 @@
+// Arquivo: db.js
+
 module.exports = function db() {
   return {
     getDBName: function () {
