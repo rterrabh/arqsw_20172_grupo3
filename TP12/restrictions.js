@@ -3,7 +3,7 @@
 module.exports = [
   {
     module: 'controler.js',
-    forbiddenModules: ['db', 'util']
+    forbiddenModules: ['db']
   },
   {
     module: 'view.js',
