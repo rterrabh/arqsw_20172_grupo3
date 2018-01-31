@@ -1,6 +1,6 @@
 module.exports = [
   {
     module: 'controler.js',
-    shouldNotImport: ['db', 'orm']
+    forbiddenModules: ['db', 'util']
   }
 ]
