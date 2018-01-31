@@ -1,0 +1,6 @@
+{"key":"G1", "isGroup":true, "pos":"0 0", "size":"1000 1000"} ,
+{"key":"node_modules/jquery X9= 1647.4126984126983", "color":"#1560D6", "pos":"0 0", "group":"G1" ,"size":"550 550"}, 
+{"key":"node_modules/lodash X9= 607.4520547945206", "color":"#5E0A38", "pos":"550 0", "group":"G1" ,"size":"300 300"}, 
+{"key":"SistemaExemplo/model/Carro X9= 14.5", "color":"#C183E2", "pos":"850 0", "group":"G1" ,"size":"50 50"}, 
+{"key":"SistemaExemplo/controllers/CarroController X9= 29", "color":"#9466E0", "pos":"900 0", "group":"G1" ,"size":"50 50"}, 
+{"key":"SistemaExemplo/view/App X9= 12", "color":"#796C19", "pos":"950 0", "group":"G1" ,"size":"50 50"}, 
