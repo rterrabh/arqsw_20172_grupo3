@@ -1,7 +1,8 @@
 const espree = require('espree');
 const estraverse = require('estraverse');
-const fs = require('fs');
 const escodegen = require('escodegen');
+const fs = require('fs');
+
 const restrictions = require('./restrictions');
 
 const clearFile = (filename) => {
